@@ -1,12 +1,11 @@
 import java.util.*;
-class Participant {
+
+class Person {
     private String name;
-    private int age;
     private String email;
 
-    public Participant(String name, int age, String email) {
+    public Person(String name, String email) {
         this.name = name;
-        this.age = age;
         this.email = email;
     }
 
@@ -16,14 +15,6 @@ class Participant {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
     }
 
     public String getEmail() {
@@ -36,17 +27,52 @@ class Participant {
 
     @Override
     public String toString() {
-        return "Participant{name='" + name + '\'' + ", age=" + age + ", email='" + email + '\'' + '}';
+        return "Person{name='" + name + '\'' + ", email='" + email + '\'' + '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Person person = (Person) obj;
+        return Objects.equals(name, person.name) && Objects.equals(email, person.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, email);
     }
 }
 
-class Event {
+class AdvancedParticipant extends Person {
+    private int age;
+
+    public AdvancedParticipant(String name, int age, String email) {
+        super(name, email);
+        this.age = age;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", age=" + age;
+    }
+}
+
+class AdvancedEvent {
     private String eventName;
     private String eventDate;
     private String location;
-    private List<Participant> participants;
+    private List<AdvancedParticipant> participants;
 
-    public Event(String eventName, String eventDate, String location) {
+    public AdvancedEvent(String eventName, String eventDate, String location) {
         this.eventName = eventName;
         this.eventDate = eventDate;
         this.location = location;
@@ -77,25 +103,49 @@ class Event {
         this.location = location;
     }
 
-    public List<Participant> getParticipants() {
+    public List<AdvancedParticipant> getParticipants() {
         return participants;
     }
 
-    public void addParticipant(Participant participant) {
+    public void addParticipant(AdvancedParticipant participant) {
         participants.add(participant);
+    }
+
+    public void sortParticipantsByName() {
+        participants.sort(Comparator.comparing(AdvancedParticipant::getName));
+    }
+
+    public AdvancedParticipant searchParticipantByEmail(String email) {
+        return participants.stream()
+                .filter(participant -> participant.getEmail().equals(email))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
     public String toString() {
-        return "Event{eventName='" + eventName + '\'' + ", eventDate='" + eventDate + '\'' + ", location='" + location + '\'' + ", participants=" + participants + '}';
+        return "AdvancedEvent{eventName='" + eventName + '\'' + ", eventDate='" + eventDate + '\'' + ", location='" + location + '\'' + ", participants=" + participants + '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        AdvancedEvent event = (AdvancedEvent) obj;
+        return Objects.equals(eventName, event.eventName) && Objects.equals(eventDate, event.eventDate) && Objects.equals(location, event.location);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(eventName, eventDate, location);
     }
 }
 
-class EventManager {
+class AdvancedEventManager {
     private String name;
-    private List<Event> events;
+    private List<AdvancedEvent> events;
 
-    public EventManager(String name) {
+    public AdvancedEventManager(String name) {
         this.name = name;
         this.events = new ArrayList<>();
     }
@@ -108,31 +158,56 @@ class EventManager {
         this.name = name;
     }
 
-    public List<Event> getEvents() {
+    public List<AdvancedEvent> getEvents() {
         return events;
     }
 
-    public void addEvent(Event event) {
+    public void addEvent(AdvancedEvent event) {
         events.add(event);
+    }
+
+    public void sortEventsByName() {
+        events.sort(Comparator.comparing(AdvancedEvent::getEventName));
     }
 
     @Override
     public String toString() {
-        return "EventManager{name='" + name + '\'' + ", events=" + events + '}';
+        return "AdvancedEventManager{name='" + name + '\'' + ", events=" + events + '}';
     }
 }
 
 public class Main {
     public static void main(String[] args) {
-        Participant p1 = new Participant("Bekzhan", 25, "beksh_14@gmail.com");
-        Participant p2 = new Participant("Dauren", 30, "Daur05@gmail.com");
+        Scanner scanner = new Scanner(System.in);
 
-        Event event = new Event("Cryptocurrency conference", "2024-05-15", "Astana");
-        event.addParticipant(p1);
-        event.addParticipant(p2);
+        AdvancedParticipant p1 = new AdvancedParticipant("Bekzhan", 25, "beksh_14@gmail.com");
+        AdvancedParticipant p2 = new AdvancedParticipant("Dauren", 30, "Daur05@gmail.com");
+        AdvancedParticipant p3 = new AdvancedParticipant("Musa", 28, "musa_240@gmail.com");
 
-        EventManager manager = new EventManager("Rakhman Khamzanov");
-        manager.addEvent(event);
+        AdvancedEvent event1 = new AdvancedEvent("Cryptocurrency conference", "2024-05-15", "Astana");
+        AdvancedEvent event2 = new AdvancedEvent("Chess Training", "2024-12-20", "Almaty");
+
+        event1.addParticipant(p1);
+        event1.addParticipant(p2);
+        event2.addParticipant(p3);
+
+        AdvancedEventManager manager = new AdvancedEventManager("Rakhman Khamzanov");
+        manager.addEvent(event1);
+        manager.addEvent(event2);
+
+        event1.sortParticipantsByName();
+        manager.sortEventsByName();
+
+        System.out.print("Enter email to search for a participant: ");
+        String emailToSearch = scanner.nextLine();
+        AdvancedParticipant foundParticipant = event1.searchParticipantByEmail(emailToSearch);
+
+        if (foundParticipant != null) {
+            System.out.println("Found Participant: " + foundParticipant);
+        }
+        else {
+            System.out.println("Participant with email " + emailToSearch + " not found.");
+        }
 
         System.out.println(manager);
     }
