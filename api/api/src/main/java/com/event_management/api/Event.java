@@ -1,15 +1,16 @@
 package com.event_management.api;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Date;
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long event_id;
+    private Long id;
 
     @Column(nullable = false)
     private String eventname;
@@ -21,11 +22,11 @@ public class Event {
 
     private String location;
 
-    public Long getEvent_id() {
-        return event_id;
+    public Long getID() {
+        return id;
     }
-    public void setEvent_id(Long event_id) {
-        this.event_id = event_id;
+    public void setID(Long id) {
+        this.id = id;
     }
     public String getEventname() {
         return eventname;
